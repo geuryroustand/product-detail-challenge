@@ -1,0 +1,41 @@
+.picker {
+  margin-bottom: 1rem;
+}
+
+.label {
+  font-weight: bold;
+  padding-bottom: 0.5rem;
+}
+
+.options {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Element styles */
+.option {
+  width: 30px;
+  height: 30px;
+  border: 1px solid $border-primary-color; /* Assuming $border-primary-color is defined elsewhere */
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  /* Modifier styles */
+  &--black {
+    background-color: black;
+  }
+
+  &--white {
+    background-color: white;
+  }
+
+  &--selected {
+    border: 2px solid #000;
+  }
+}
