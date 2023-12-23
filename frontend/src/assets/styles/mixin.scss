@@ -1,0 +1,22 @@
+@mixin responsive-container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: $container-padding;
+  padding-left: $container-padding;
+
+  @media (min-width: $small-screen) {
+    max-width: 33.75rem; /* Equivalent to 540px (33.75 * 16px) */
+  }
+
+  @media (min-width: $medium-screen) {
+    max-width: 45rem; /* Equivalent to 720px */
+  }
+
+  @media (min-width: $large-screen) {
+    max-width: 56.25rem; /* Equivalent to 900px */
+  }
+
+  @media (min-width: $extra-large-screen) {
+    max-width: 71.25rem; /* Equivalent to 1140px */
+  }
+}

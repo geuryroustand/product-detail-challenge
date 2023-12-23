@@ -6,14 +6,18 @@ type ButtonProps = {
   variant: "primary" | "secondary";
   size: "small" | "full";
   className?: string;
+  onClick: () => void;
 };
 
-const Button = ({ variant, children, size }: ButtonProps) => {
+const Button = ({ onClick, variant, children, size }: ButtonProps) => {
   const getButtonVariant = styles[variant];
   const getButtonSize = styles[size];
 
   return (
-    <button className={`${getButtonVariant} ${getButtonSize}`}>
+    <button
+      onClick={onClick}
+      className={`${styles.btn} ${getButtonVariant} ${getButtonSize}`}
+    >
       {children}
     </button>
   );

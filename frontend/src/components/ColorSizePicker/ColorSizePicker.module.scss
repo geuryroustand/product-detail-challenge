@@ -1,0 +1,57 @@
+.picker {
+  margin: 1rem 0px;
+}
+
+.label {
+  font-weight: bold;
+  padding-bottom: 0.5rem;
+}
+
+.options {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.option {
+  width: 30px;
+  height: 30px;
+  border: 1px solid $border-primary-color;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &--black {
+    background-color: $black-color;
+  }
+
+  &--white {
+    background-color: $white-color;
+  }
+
+  &--selected {
+    border: 2px solid $black-color;
+  }
+}
+
+.size {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  &--option {
+    width: 3rem;
+    text-align: center;
+    border: 1px solid $border-primary-color;
+    padding: 0.3rem;
+  }
+
+  &--selected {
+    background-color: $primary-color;
+    color: $white-color;
+  }
+}

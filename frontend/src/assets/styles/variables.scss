@@ -2,6 +2,8 @@
 $primary-color: #3498db;
 $secondary-color: #b12704;
 $border-primary-color: #ddd;
+$black-color: black;
+$white-color: white;
 
 // Typography
 
@@ -9,3 +11,11 @@ $small-font-size: 16px;
 $medium-font-size: 24px;
 $heading-font-family: "Roboto", sans-serif;
 $body-font-family: "Open Sans", sans-serif;
+
+// Define breakpoints in rem
+$small-screen: 36rem;
+$medium-screen: 48rem;
+$large-screen: 62rem;
+$extra-large-screen: 71.25rem;
+
+$container-padding: 0.9375rem;
