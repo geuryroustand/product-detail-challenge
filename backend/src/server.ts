@@ -6,7 +6,9 @@ import compression from "compression";
 import cors from "cors";
 import mongoose from "mongoose";
 import listEndpoints from "express-list-endpoints";
-import product from "./services/product/index";
+
+import productRouter from "./routers/productRoutes";
+import addToCartRouter from "./routers/addToCartRoutes";
 
 const server = express();
 
@@ -16,13 +18,16 @@ server.use(
   })
 );
 
+//************************MIDDLEWARES**************************
+
 server.use(compression());
 server.use(cookieParser());
 server.use(bodyParser.json());
 
 //************************ROUTERS**************************
 
-server.use("/product", product);
+server.use("/product", productRouter);
+server.use("/cart", addToCartRouter);
 
 http.createServer(server);
 

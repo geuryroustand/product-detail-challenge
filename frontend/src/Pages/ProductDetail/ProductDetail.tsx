@@ -3,59 +3,56 @@ import Button from "../../components/Button/Button";
 import ColorSizePicker from "../../components/ColorSizePicker/ColorSizePicker";
 import Title from "../../components/Title/Title";
 import styles from "./ProductDetail.module.scss";
+import ProductPrice from "../../components/ProductPrice/ProductPrice";
+import ProductDescription from "../../components/ProductDescription/ProductDescription";
+import addToCart from "../../components/helper/addToCart";
+import { useDispatch } from "react-redux";
+import { FetchConfig, fetchApiData } from "../../components/store/fetchSlice";
+import { AppDispatch } from "../../components/store/store";
+import { useParams } from "react-router-dom";
 
-interface CartItem {
-  id: number;
+export interface CartItemProps {
+  id: string;
   quantity: number;
-  product: string;
+  title: string;
   price: number;
   color: string;
   size: string;
 }
 
 const ProductDetail = () => {
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [selectedColor, setSelectedColor] = useState<string | undefined>();
-  const [selectedSize, setSelectedSize] = useState<string | undefined>();
+  const [cart, setCart] = useState<CartItemProps[]>([]);
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
+
+  const { productId } = useParams();
+
+  console.log("productId", productId);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    const config: FetchConfig = {
+      url: "http://localhost:8080/product",
+      method: "GET",
+    };
+
+    dispatch(fetchApiData(config));
+  }, []);
 
   const product = {
-    id: 1,
-    product: "Tour Crew Neck Sweatshirt",
+    id: "1",
+    title: "Tour Crew Neck Sweatshirt",
     price: 30,
+    quantity: 1,
+    color: "black",
+    size: "medium",
   };
 
-  const addToCart = () => {
-    if (selectedColor && selectedSize) {
-      const existingItemIndex = cart.findIndex(
-        (item) =>
-          item.id === product.id &&
-          item.color === selectedColor &&
-          item.size === selectedSize
-      );
-
-      if (existingItemIndex !== -1) {
-        // If the same item exists in the cart, update the quantity instead of adding a new item
-        const updatedCart = cart.map((item, index) => {
-          if (index === existingItemIndex) {
-            return {
-              ...item,
-              quantity: item.quantity + 1,
-            };
-          }
-          return item;
-        });
-
-        setCart(updatedCart);
-      } else {
-        // Add a new item to the cart
-        const newCartItem: CartItem = {
-          ...product,
-          color: selectedColor,
-          size: selectedSize,
-          quantity: 1,
-        };
-        setCart([...cart, newCartItem]);
-      }
+  const manageAddToCart = () => {
+    if (selectedColor !== undefined && selectedSize !== undefined) {
+      const updatedCart = addToCart(product, selectedColor, selectedSize, cart);
+      setCart(updatedCart);
     }
   };
 
@@ -67,10 +64,6 @@ const ProductDetail = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("cart", cart);
-  }, [cart]);
-
   return (
     <div className={styles.productDetail}>
       <img
@@ -81,10 +74,7 @@ const ProductDetail = () => {
 
       <div className={styles["productDetail-right"]}>
         <Title title="Tour Crew Neck Sweatshirt" />
-        <div className={styles.priceWrapper}>
-          <span className={styles["priceWrapper-price"]}>Price:</span>
-          <span className={styles["priceWrapper-value"]}>30€</span>
-        </div>
+        <ProductPrice price={30} />
         <ColorSizePicker
           selectedItemColorOrSize={selectedItemColorOrSize}
           type="size"
@@ -94,8 +84,8 @@ const ProductDetail = () => {
           type="color"
         />
 
-        <p>
-          Finally—a white sneaker for the rest of your life. Whether you’re
+        <ProductDescription
+          description="   Finally—a white sneaker for the rest of your life. Whether you’re
           walking, working, or simply kicking it, the versatile and understated
           Royale Blanco is going to get you where you need to go. It might even
           help you feel better about where you are right now. Every great outfit
@@ -104,9 +94,9 @@ const ProductDetail = () => {
           directors, manga artists, comic book artists, graffiti artists, and
           now—anyone who arranges words, letters, numbers, and symbols for
           publication, display, or distribution—from clerical workers and
-          newsletter writers to anyone self-publishing materials
-        </p>
-        <Button onClick={addToCart} variant="primary" size="full">
+          newsletter writers to anyone self-publishing materials"
+        />
+        <Button onClick={manageAddToCart} variant="primary" size="full">
           Add to cart
         </Button>
       </div>

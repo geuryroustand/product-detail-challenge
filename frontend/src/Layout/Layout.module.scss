@@ -1,3 +1,42 @@
 .main {
   @include responsive-container;
 }
+
+.header {
+  height: 5rem;
+  margin-bottom: 4rem;
+  background-color: $primary-color;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+
+  &-nav {
+    padding: 0px 2rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    cursor: pointer;
+
+    &--counter {
+      text-align: center;
+      color: $secondary-color;
+      font-weight: 500;
+      font-size: 1.2rem;
+    }
+
+    &--icon {
+      color: $white-color;
+      font-size: 2rem;
+    }
+
+    &--wrapper {
+      position: relative; /* Add relative positioning to the wrapper */
+    }
+  }
+}
+
+.footer {
+  text-align: center;
+  margin-top: 4rem;
+  font-weight: bold;
+}

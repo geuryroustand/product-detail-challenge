@@ -18,20 +18,3 @@
     }
   }
 }
-
-.priceWrapper {
-  display: flex;
-  gap: 0.5rem;
-  padding: 0.5rem 0px;
-  font-size: $small-font-size;
-
-  &-price {
-    font-weight: bold;
-    color: $primary-color;
-  }
-
-  &-value {
-    color: $secondary-color;
-    font-weight: bold;
-  }
-}
