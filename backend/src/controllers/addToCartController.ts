@@ -5,24 +5,24 @@ import validationError from "../helper/validationError";
 
 const addToCart = async (req: Request, res: Response) => {
   try {
-    const { id, quantity, color, title, price, size } = req.body;
+    const { productId, quantity, color, productName, price, size } = req.body;
 
-    const product: Product = await productSchema.findById(id);
+    const product: Product = await productSchema.findById(productId);
 
     if (!product) {
       res.status(404).json({ message: "Product not found" });
       return;
     }
 
-    if (!quantity || !color || !title || !price || !size) {
-      return;
-    }
+    const findProductInCart: Product = await cartItemSchema.findById(productId);
+
+    console.log("findProductInCart", findProductInCart);
 
     const cartItem: CartItem = await cartItemSchema.create({
-      id,
+      productId,
       quantity,
       color,
-      title,
+      productName,
       price,
       size,
     });
@@ -41,4 +41,23 @@ const addToCart = async (req: Request, res: Response) => {
   }
 };
 
-export { addToCart };
+const getCartItems = async (req: Request, res: Response) => {
+  try {
+    const cartItem = await cartItemSchema.find();
+
+    if (!cartItem) {
+      res.status(404).json({ message: "Not product found" });
+    }
+    res.status(201).json(cartItem);
+  } catch (error) {
+    if (error.name === "ValidationError" && error.errors) {
+      return validationError(error, res);
+    }
+
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
+
+export { addToCart, getCartItems };

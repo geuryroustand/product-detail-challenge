@@ -1,0 +1,15 @@
+.card {
+  &-image {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (min-width: $extra-large-screen) {
+  .card {
+    &-image {
+      width: 30rem;
+      height: 30rem;
+    }
+  }
+}

@@ -1,16 +1,16 @@
 import { model, Schema, Types } from "mongoose";
 
 export interface CartItem {
-  id: Types.ObjectId;
+  productId: Types.ObjectId;
   quantity: number;
-  title: string;
+  productName: string;
   price: number;
   color: string;
   size: string;
 }
 
 const CartItemSchema: Schema<CartItem> = new Schema({
-  id: {
+  productId: {
     type: Schema.Types.ObjectId,
     ref: "product",
     required: [true, "Product ID is required."],
@@ -20,9 +20,9 @@ const CartItemSchema: Schema<CartItem> = new Schema({
     required: [true, "Quantity is required."],
     default: 1,
   },
-  title: {
+  productName: {
     type: String,
-    required: [true, "Title is required."],
+    required: [true, "productName is required."],
   },
   price: {
     type: Number,

@@ -7,6 +7,7 @@ export interface Product {
   colors: string[];
   sizes: string[];
   productDescription: string;
+  image: string;
 }
 
 const productSchema: Schema<Product> = new Schema({
@@ -41,6 +42,10 @@ const productSchema: Schema<Product> = new Schema({
   productDescription: {
     type: String,
     required: [true, "Product Description is required."],
+  },
+  image: {
+    type: String,
+    required: [true, "Product image is required."],
   },
 });
 

@@ -1,35 +1,48 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import reactLogo from "../../assets/react.svg";
-import viteLogo from "/vite.svg";
+import {
+  FetchConfig,
+  ProductProps,
+  fetchProductDetails,
+} from "../../components/store/productDetailsSlice";
+import { AppDispatch, RootState } from "../../components/store/store";
 
-interface Props {}
+import { fetchCartItems } from "../../components/store/cartItemsSlice";
+import Card from "../../components/Card/Card";
 
-const HomePage = (props: Props) => {
-  const [count, setCount] = useState(0);
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+import styles from "./HomePage.module.scss";
+const HomePage = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    const config: FetchConfig = {
+      url: `${import.meta.env.VITE_API_DEV_URL}/product`,
+      method: "GET",
+    };
+
+    dispatch(fetchProductDetails(config));
+    dispatch(fetchCartItems());
+  }, []);
+
+  const { loading, data, error } = useSelector(
+    (state: RootState) => state.fetch
+  );
+
+  const errorMsg = error;
+
+  return loading ? (
+    <p>Loading...</p>
+  ) : error ? (
+    <p>{errorMsg}</p>
+  ) : data && Array.isArray(data) ? (
+    <div className={styles.home}>
+      {data.map((item: ProductProps) => (
+        <Card key={item._id} item={item} />
+      ))}
+    </div>
+  ) : (
+    <p>No data available.</p>
   );
 };
 

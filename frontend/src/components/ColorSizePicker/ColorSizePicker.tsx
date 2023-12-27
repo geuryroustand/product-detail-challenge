@@ -4,11 +4,13 @@ import styles from "./ColorSizePicker.module.scss";
 interface ColorSizePickerProps {
   type: "color" | "size";
   selectedItemColorOrSize: (item: string, type: "color" | "size") => void;
+  options: string[];
 }
 
 const ColorSizePicker = ({
   type,
   selectedItemColorOrSize,
+  options,
 }: ColorSizePickerProps) => {
   const [selectedItem, setSelectedItem] = useState("");
 
@@ -22,42 +24,23 @@ const ColorSizePicker = ({
       <p className={styles.label}>
         {type === "color" ? "Color" : "Size"}: {selectedItem}
       </p>
-
-      {type === "color" ? (
-        <div className={styles.options}>
+      <div className={type === "color" ? styles.options : styles.size}>
+        {options.map((option, index) => (
           <span
-            className={`${styles.option} ${
-              type === "color" && styles["option--black"]
-            } ${selectedItem === "Black" && styles["option--selected"]}`}
-            onClick={() => selectItem("Black")}
-          ></span>
-          <span
-            className={`${styles.option} ${
-              type === "color" && styles["option--white"]
-            } ${selectedItem === "White" && styles["option--selected"]}`}
-            onClick={() => selectItem("White")}
-          ></span>
-        </div>
-      ) : (
-        <div className={styles.size}>
-          <span
-            className={`${styles["size--option"]} ${
-              selectedItem === "Small" && styles["size--selected"]
-            }`}
-            onClick={() => selectItem("Small")}
+            key={`${index}-${option.toLowerCase()}`}
+            className={`${
+              type === "color"
+                ? `${styles.option} ${
+                    styles[`option--${option.toLowerCase()}`]
+                  }`
+                : styles["size--option"]
+            } ${selectedItem === option && styles["size--selected"]}`}
+            onClick={() => selectItem(option)}
           >
-            S
+            {type === "color" ? "" : option.slice(0, 1).toUpperCase()}
           </span>
-          <span
-            className={`${styles["size--option"]} ${
-              selectedItem === "Medium" && styles["size--selected"]
-            }`}
-            onClick={() => selectItem("Medium")}
-          >
-            M
-          </span>
-        </div>
-      )}
+        ))}
+      </div>
     </div>
   );
 };

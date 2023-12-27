@@ -3,10 +3,14 @@ import HomePage from "../Pages/HomePage/HomePage";
 import ProductDetail from "../Pages/ProductDetail/ProductDetail";
 import App from "../App";
 
+import ErrorPage from "../Pages/ErrorPage/ErrorPage";
+
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "",

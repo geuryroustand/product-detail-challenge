@@ -6,53 +6,84 @@ import styles from "./ProductDetail.module.scss";
 import ProductPrice from "../../components/ProductPrice/ProductPrice";
 import ProductDescription from "../../components/ProductDescription/ProductDescription";
 import addToCart from "../../components/helper/addToCart";
-import { useDispatch } from "react-redux";
-import { FetchConfig, fetchApiData } from "../../components/store/fetchSlice";
-import { AppDispatch } from "../../components/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  FetchConfig,
+  fetchProductDetails,
+} from "../../components/store/productDetailsSlice";
+import { AppDispatch, RootState } from "../../components/store/store";
 import { useParams } from "react-router-dom";
+import { fetchUpdateCart } from "../../components/store/updateCart";
+import { fetchCartItems } from "../../components/store/cartItemsSlice";
+import Image from "../../components/Image/Image";
 
 export interface CartItemProps {
-  id: string;
+  productId: string;
   quantity: number;
-  title: string;
+  productName: string;
   price: number;
   color: string;
   size: string;
 }
 
 const ProductDetail = () => {
+  const { cartItems } = useSelector((state: RootState) => state.cart);
+
   const [cart, setCart] = useState<CartItemProps[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
 
   const { productId } = useParams();
+  const { loading, data, error } = useSelector(
+    (state: RootState) => state.fetch
+  );
 
-  console.log("productId", productId);
+  const errorMsg = error;
+  const imageUrl = data?.image || "";
+  const productName = data?.productName || "";
+  const productDescription = data?.productDescription || "";
+  const price = data?.price || 0;
+  const colors = data?.colors || [];
+  const sizes = data?.sizes || [];
 
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const config: FetchConfig = {
-      url: "http://localhost:8080/product",
+      url: `${import.meta.env.VITE_API_DEV_URL}/product/${productId}`,
       method: "GET",
     };
 
-    dispatch(fetchApiData(config));
+    dispatch(fetchProductDetails(config));
+    dispatch(fetchCartItems());
+    setCart(cartItems);
   }, []);
 
-  const product = {
-    id: "1",
-    title: "Tour Crew Neck Sweatshirt",
-    price: 30,
-    quantity: 1,
-    color: "black",
-    size: "medium",
+  const selectedProduct = {
+    productId: data?._id || "",
+    productName: data?.productName || "",
+    price: data?.price || 0,
+    quantity: data?.quantity || 0,
+    color: selectedColor,
+    size: selectedSize,
   };
 
-  const manageAddToCart = () => {
+  const manageAddToCart = async () => {
     if (selectedColor !== undefined && selectedSize !== undefined) {
-      const updatedCart = addToCart(product, selectedColor, selectedSize, cart);
+      const updatedCart = addToCart(
+        selectedProduct,
+        selectedColor,
+        selectedSize,
+        cart
+      );
       setCart(updatedCart);
+
+      try {
+        await dispatch(fetchUpdateCart(updatedCart[0]));
+        await dispatch(fetchCartItems());
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -64,38 +95,32 @@ const ProductDetail = () => {
     }
   };
 
-  return (
+  return loading && data === null ? (
+    <p>Loading...</p>
+  ) : error ? (
+    <p>{errorMsg}</p>
+  ) : (
     <div className={styles.productDetail}>
-      <img
+      <Image
+        imageUrl={imageUrl}
+        altText={data?.productName || ""}
         className={styles["productDetail-image"]}
-        src="/product1.webp"
-        alt="pan"
       />
-
       <div className={styles["productDetail-right"]}>
-        <Title title="Tour Crew Neck Sweatshirt" />
-        <ProductPrice price={30} />
+        <Title title={productName} />
+        <ProductPrice price={price} />
         <ColorSizePicker
+          options={sizes}
           selectedItemColorOrSize={selectedItemColorOrSize}
           type="size"
         />
         <ColorSizePicker
+          options={colors}
           selectedItemColorOrSize={selectedItemColorOrSize}
           type="color"
         />
 
-        <ProductDescription
-          description="   Finally—a white sneaker for the rest of your life. Whether you’re
-          walking, working, or simply kicking it, the versatile and understated
-          Royale Blanco is going to get you where you need to go. It might even
-          help you feel better about where you are right now. Every great outfit
-          is built from the ground up. Start here. Typography is the work of
-          typesetters, compositors, typographers, graphic designers, art
-          directors, manga artists, comic book artists, graffiti artists, and
-          now—anyone who arranges words, letters, numbers, and symbols for
-          publication, display, or distribution—from clerical workers and
-          newsletter writers to anyone self-publishing materials"
-        />
+        <ProductDescription description={productDescription} />
         <Button onClick={manageAddToCart} variant="primary" size="full">
           Add to cart
         </Button>

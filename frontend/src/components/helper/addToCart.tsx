@@ -1,19 +1,9 @@
 // import { CartItemProps } from "../../Pages/ProductDetail/ProductDetail";
 
-interface ProductProps {
-  id: string;
-  productName: string;
-  price: number;
-  quantity: number;
-  colors: [string];
-  sizes: [string];
-  productDescription: string;
-}
-
 interface CartItemProps {
-  id: string;
+  productId: string;
   quantity: number;
-  title: string;
+  productName: string;
   price: number;
   color: string;
   size: string;
@@ -25,19 +15,17 @@ const addToCart = (
   selectedSize: string,
   cart: CartItemProps[]
 ) => {
-  console.log(selectedColor);
-
   if (selectedColor && selectedSize) {
     const existingItem = cart.find(
       (item) =>
-        item.id === product.id &&
+        item.productId === product.productId &&
         item.color === selectedColor &&
         item.size === selectedSize
     );
 
     if (existingItem) {
       const updatedCart = cart.map((item) =>
-        item.id === existingItem.id &&
+        item.productId === existingItem.productId &&
         item.color === existingItem.color &&
         item.size === existingItem.size
           ? {

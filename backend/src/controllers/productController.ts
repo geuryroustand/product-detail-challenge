@@ -36,11 +36,15 @@ const getProductById = async (req: Request, res: Response) => {
     const product: Product = await productSchema.findById(productId);
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found." });
+      return res.status(404).send({ error: "Product not found." });
     }
 
     res.status(200).json(product);
   } catch (error) {
+    if (error.name === "ValidationError" && error.errors) {
+      return validationError(error, res);
+    }
+
     res
       .status(500)
       .json({ message: "Failed to fetch product.", error: error.message });

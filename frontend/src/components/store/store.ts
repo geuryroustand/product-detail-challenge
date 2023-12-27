@@ -1,15 +1,20 @@
-import { configureStore } from "@reduxjs/toolkit";
-import fetchReducer from "./fetchSlice";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import productDetailsSlice from "./productDetailsSlice";
+import cartSlice from "./updateCart";
+import cartItemsSlice from "./cartItemsSlice";
 
-const store = configureStore({
-  reducer: {
-    fetch: fetchReducer,
-  },
+const reducers = combineReducers({
+  fetch: productDetailsSlice,
+  productDetails: cartSlice,
+  cart: cartItemsSlice,
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
+const store = configureStore({
+  reducer: reducers,
+});
+
 export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+
 export type AppDispatch = typeof store.dispatch;
 
 export default store;
