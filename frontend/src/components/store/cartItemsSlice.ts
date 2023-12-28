@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CartItemProps } from "../../Pages/ProductDetail/ProductDetail";
+import { CartItemProps } from "../Types/Types";
 
 interface CartFetchConfig {
   url: string;

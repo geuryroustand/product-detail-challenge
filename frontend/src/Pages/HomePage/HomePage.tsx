@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   FetchConfig,
-  ProductProps,
   fetchProductDetails,
 } from "../../components/store/productDetailsSlice";
 import { AppDispatch, RootState } from "../../components/store/store";
@@ -12,6 +11,7 @@ import { fetchCartItems } from "../../components/store/cartItemsSlice";
 import Card from "../../components/Card/Card";
 
 import styles from "./HomePage.module.scss";
+import { ProductProps } from "../../components/Types/Types";
 const HomePage = () => {
   const dispatch = useDispatch<AppDispatch>();
 

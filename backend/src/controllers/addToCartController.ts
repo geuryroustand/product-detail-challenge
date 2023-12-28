@@ -14,10 +14,6 @@ const addToCart = async (req: Request, res: Response) => {
       return;
     }
 
-    const findProductInCart: Product = await cartItemSchema.findById(productId);
-
-    console.log("findProductInCart", findProductInCart);
-
     const cartItem: CartItem = await cartItemSchema.create({
       productId,
       quantity,

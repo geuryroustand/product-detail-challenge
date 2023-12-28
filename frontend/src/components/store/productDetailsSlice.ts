@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { ProductProps } from "../Types/Types";
 
 export interface FetchConfig {
   url: string;
@@ -32,17 +33,6 @@ const fetchProductDetails = createAsyncThunk(
     }
   }
 );
-
-export interface ProductProps {
-  _id: string;
-  productName: string;
-  price: number;
-  quantity: number;
-  colors: [string];
-  sizes: [string];
-  productDescription: string;
-  image: string;
-}
 
 interface FetchSliceState {
   data: ProductProps | null;

@@ -5,7 +5,7 @@ import Title from "../../components/Title/Title";
 import styles from "./ProductDetail.module.scss";
 import ProductPrice from "../../components/ProductPrice/ProductPrice";
 import ProductDescription from "../../components/ProductDescription/ProductDescription";
-import addToCart from "../../components/helper/addToCart";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   FetchConfig,
@@ -16,20 +16,9 @@ import { useParams } from "react-router-dom";
 import { fetchUpdateCart } from "../../components/store/updateCart";
 import { fetchCartItems } from "../../components/store/cartItemsSlice";
 import Image from "../../components/Image/Image";
-
-export interface CartItemProps {
-  productId: string;
-  quantity: number;
-  productName: string;
-  price: number;
-  color: string;
-  size: string;
-}
+import { CartItemProps } from "../../components/Types/Types";
 
 const ProductDetail = () => {
-  const { cartItems } = useSelector((state: RootState) => state.cart);
-
-  const [cart, setCart] = useState<CartItemProps[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
 
@@ -56,10 +45,9 @@ const ProductDetail = () => {
 
     dispatch(fetchProductDetails(config));
     dispatch(fetchCartItems());
-    setCart(cartItems);
   }, []);
 
-  const selectedProduct = {
+  const selectedProduct: CartItemProps = {
     productId: data?._id || "",
     productName: data?.productName || "",
     price: data?.price || 0,
@@ -70,16 +58,8 @@ const ProductDetail = () => {
 
   const manageAddToCart = async () => {
     if (selectedColor !== undefined && selectedSize !== undefined) {
-      const updatedCart = addToCart(
-        selectedProduct,
-        selectedColor,
-        selectedSize,
-        cart
-      );
-      setCart(updatedCart);
-
       try {
-        await dispatch(fetchUpdateCart(updatedCart[0]));
+        await dispatch(fetchUpdateCart(selectedProduct));
         await dispatch(fetchCartItems());
       } catch (error) {
         console.log(error);

@@ -1,5 +1,4 @@
 .cart {
-  height: 70vh;
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
@@ -7,4 +6,19 @@
   width: 18rem;
   background-color: white;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+
+  &-heading {
+    font-size: 1rem;
+    margin: 1rem 0px;
+    text-align: center;
+  }
+
+  &-productName {
+    font-size: 0.9rem;
+  }
+
+  &-details {
+    padding: 1rem 0px 1rem 1rem;
+    border-bottom: 1px solid;
+  }
 }

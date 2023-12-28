@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CartItemProps } from "../../Pages/ProductDetail/ProductDetail";
+import { CartItemProps } from "../Types/Types";
 
 interface CartFetchConfig {
   url: string;
@@ -9,11 +9,11 @@ interface CartFetchConfig {
 
 export const fetchUpdateCart = createAsyncThunk(
   "cart/updateCart",
-  async (cartItems: CartItemProps, thunkAPI) => {
+  async (cartItem: CartItemProps, thunkAPI) => {
     const config: CartFetchConfig = {
       url: `${import.meta.env.VITE_API_DEV_URL}/cart`,
       method: "POST",
-      body: cartItems,
+      body: cartItem,
     };
 
     try {
