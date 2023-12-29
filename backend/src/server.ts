@@ -2,6 +2,7 @@ import express from "express";
 import http from "http";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import compression from "compression";
 
 import cors from "cors";
 import mongoose from "mongoose";
@@ -9,6 +10,7 @@ import listEndpoints from "express-list-endpoints";
 
 import productRouter from "./routers/productRoutes";
 import addToCartRouter from "./routers/addToCartRoutes";
+import authRoutes from "./routers/authRoutes";
 
 const server = express();
 
@@ -20,6 +22,7 @@ server.use(
 
 //************************MIDDLEWARES**************************
 
+server.use(compression());
 server.use(cookieParser());
 server.use(bodyParser.json());
 
@@ -27,10 +30,11 @@ server.use(bodyParser.json());
 
 server.use("/product", productRouter);
 server.use("/cart", addToCartRouter);
+server.use("/", authRoutes);
 
 http.createServer(server);
 
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 const MONGO_CONNECTION_URL =
   "mongodb+srv://geury:TSN2nqlg3MgL9XCw@cluster0.8gw6mh4.mongodb.net/marketplace?retryWrites=true&w=majority";
