@@ -9,6 +9,12 @@ To start the backend server, navigate to the `backend` folder using your termina
 cd backend
 ```
 
+Need to install the dependencies with the following command:
+
+```bash
+npm i
+```
+
 Then run the following command to initiate the backend server:
 
 ```bash
@@ -25,6 +31,12 @@ To run the Frontend, navigate to the `Frontend` directory in your terminal:
 
 ```bash
 cd Frontend
+```
+
+Need to install the dependencies with the following command:
+
+```bash
+npm i
 ```
 
 Initiate the development server by running:
