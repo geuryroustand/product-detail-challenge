@@ -2,10 +2,19 @@ import { Request, Response } from "express";
 import cartItemSchema, { CartItem } from "../models/cartItemSchema";
 import productSchema, { Product } from "../models/productSchema";
 import validationError from "../helper/validationError";
+import authSchema, { UserProps } from "../models/authSchema";
 
 const addToCart = async (req: Request, res: Response) => {
   try {
-    const { productId, quantity, color, productName, price, size } = req.body;
+    const { productId, quantity, color, size, userId } = req.body;
+
+    const user: UserProps = await authSchema
+      .findById(userId)
+      .populate("cartItems");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     const product: Product = await productSchema.findById(productId);
 
@@ -14,13 +23,19 @@ const addToCart = async (req: Request, res: Response) => {
       return;
     }
 
-    const cartItem: CartItem = await cartItemSchema.create({
-      productId,
+    const cartItemData: CartItem = {
+      productId: product._id,
       quantity,
+      productName: product.productName,
+      price: product.price,
       color,
-      productName,
-      price,
       size,
+    };
+
+    const cartItem: CartItem = await cartItemSchema.create(cartItemData);
+
+    await authSchema.findByIdAndUpdate(userId, {
+      $push: { cartItems: cartItem._id },
     });
 
     res

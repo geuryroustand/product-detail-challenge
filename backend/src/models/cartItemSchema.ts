@@ -2,6 +2,7 @@ import { model, Schema, Types } from "mongoose";
 
 export interface CartItem {
   productId: Types.ObjectId;
+  _id?: Types.ObjectId;
   quantity: number;
   productName: string;
   price: number;

@@ -38,7 +38,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await authSchema.checkCredentials(email, password);
 
-    res.status(200).json({ message: "Login successful", user: user.username });
+    res.status(200).json({ message: "Login successful", user });
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error: error.message });
   }

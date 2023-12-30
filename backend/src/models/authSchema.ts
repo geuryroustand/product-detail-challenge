@@ -7,7 +7,7 @@ export interface UserProps {
   username: string;
   email: string;
   password: string;
-  shoppingCart: Types.ObjectId;
+  cartItems: Types.ObjectId;
 }
 interface userModal extends Model<UserProps & Document> {
   checkCredentials(email: string, password: string): Promise<UserProps>;
@@ -31,15 +31,19 @@ const userSchema: Schema<UserProps> = new Schema({
     required: [true, "Password is required"],
     minlength: [5, "Minimum password length is 6 characters"],
   },
-  shoppingCart: {
-    type: Schema.Types.ObjectId,
-    ref: "cartItem",
-  },
+  cartItems: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "cartItem",
+    },
+  ],
 });
 
 userSchema.pre("save", async function (next: NextFunction) {
-  const salt = await bcrypt.genSalt();
-  this.password = await bcrypt.hash(this.password, salt);
+  if (this.isModified("password")) {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+  }
 
   next();
 });
@@ -49,7 +53,7 @@ userSchema.statics.checkCredentials = async function (
   email: string,
   password: string
 ) {
-  const user = await this.findOne({ email });
+  const user = await this.findOne({ email }).populate("cartItems");
 
   if (user) {
     const isValidPassword = await bcrypt.compare(password, user.password);
