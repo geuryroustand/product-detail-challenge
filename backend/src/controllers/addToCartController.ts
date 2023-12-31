@@ -2,13 +2,13 @@ import { Request, Response } from "express";
 import cartItemSchema, { CartItem } from "../models/cartItemSchema";
 import productSchema, { Product } from "../models/productSchema";
 import validationError from "../helper/validationError";
-import authSchema, { UserProps } from "../models/authSchema";
+import userSchema, { UserProps } from "../models/userSchema";
 
 const addToCart = async (req: Request, res: Response) => {
   try {
     const { productId, quantity, color, size, userId } = req.body;
 
-    const user: UserProps = await authSchema
+    const user: UserProps = await userSchema
       .findById(userId)
       .populate("cartItems");
 
@@ -34,7 +34,7 @@ const addToCart = async (req: Request, res: Response) => {
 
     const cartItem: CartItem = await cartItemSchema.create(cartItemData);
 
-    await authSchema.findByIdAndUpdate(userId, {
+    await userSchema.findByIdAndUpdate(userId, {
       $push: { cartItems: cartItem._id },
     });
 

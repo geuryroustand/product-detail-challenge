@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CartItemProps } from "../Types/Types";
+import { CartItemProps } from "../components/Types/Types";
+import { fetchUrl } from "../helper/environmentVariable";
 
 interface CartFetchConfig {
   url: string;
@@ -10,7 +11,7 @@ export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
   async (_, thunkAPI) => {
     const config: CartFetchConfig = {
-      url: `${import.meta.env.VITE_API_DEV_URL}/cart`,
+      url: `${fetchUrl}/cart`,
       method: "GET",
     };
 

@@ -10,11 +10,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   FetchConfig,
   fetchProductDetails,
-} from "../../components/store/productDetailsSlice";
-import { AppDispatch, RootState } from "../../components/store/store";
+} from "../../store/productDetailsSlice";
+import { AppDispatch, RootState } from "../../store/store";
 import { useParams } from "react-router-dom";
-import { fetchUpdateCart } from "../../components/store/updateCart";
-import { fetchCartItems } from "../../components/store/cartItemsSlice";
+import { fetchUpdateCart } from "../../store/updateCart";
+import { fetchCartItems } from "../../store/cartItemsSlice";
 import Image from "../../components/Image/Image";
 import { CartItemProps } from "../../components/Types/Types";
 
@@ -101,7 +101,12 @@ const ProductDetail = () => {
         />
 
         <ProductDescription description={productDescription} />
-        <Button onClick={manageAddToCart} variant="primary" size="full">
+        <Button
+          className={styles.btn}
+          onClick={manageAddToCart}
+          variant="primary"
+          size="full"
+        >
           Add to cart
         </Button>
       </div>

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { ProductProps } from "../Types/Types";
+import { ProductProps } from "../components/Types/Types";
 
 export interface FetchConfig {
   url: string;

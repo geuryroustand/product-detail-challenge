@@ -1,4 +1,4 @@
-import { CartItemProps } from "../Types/Types";
+import { CartItemProps } from "../components/Types/Types";
 
 const addToCart = (
   product: CartItemProps,

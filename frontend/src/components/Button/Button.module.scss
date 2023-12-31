@@ -4,6 +4,13 @@
   &:hover {
     background-color: $secondary-color;
   }
+  &:disabled,
+  &[disabled] {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+  }
 }
 
 .primary {
@@ -13,10 +20,6 @@
   border: none;
   border-radius: 0.3rem;
   width: 90%;
-  font-size: 1rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin: 1rem 0px;
 }
 
 .small {

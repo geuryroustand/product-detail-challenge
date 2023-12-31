@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 
-import authSchema, { UserProps } from "../models/authSchema";
+import userSchema, { UserProps } from "../models/userSchema";
 import validationError from "../helper/validationError";
 
 const signupUser = async (req: Request, res: Response): Promise<void> => {
   const { username, email, password }: UserProps = req.body;
 
   try {
-    const existingUser = await authSchema.findOne({
+    const existingUser = await userSchema.findOne({
       $or: [{ username }, { email }],
     });
     if (existingUser) {
@@ -15,7 +15,7 @@ const signupUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const newUser = new authSchema({ username, email, password });
+    const newUser = new userSchema({ username, email, password });
 
     await newUser.save();
 
@@ -36,7 +36,17 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password }: { email: string; password: string } = req.body;
 
   try {
-    const user = await authSchema.checkCredentials(email, password);
+    const user = await userSchema.checkCredentials(email, password);
+
+    if (user.message === "Invalid password") {
+      res.status(401).json({ password: "Invalid password" });
+      return;
+    }
+
+    if (user.message === "Incorrect email") {
+      res.status(401).json({ email: "Incorrect email" });
+      return;
+    }
 
     res.status(200).json({ message: "Login successful", user });
   } catch (error) {

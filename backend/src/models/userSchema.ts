@@ -1,4 +1,4 @@
-import { NextFunction } from "express";
+import { NextFunction, Response } from "express";
 import bcrypt from "bcrypt";
 import { model, Schema, Types, Document, Model } from "mongoose";
 import isEmail from "validator/lib/isEmail";
@@ -8,6 +8,7 @@ export interface UserProps {
   email: string;
   password: string;
   cartItems: Types.ObjectId;
+  message?: string;
 }
 interface userModal extends Model<UserProps & Document> {
   checkCredentials(email: string, password: string): Promise<UserProps>;
@@ -60,9 +61,15 @@ userSchema.statics.checkCredentials = async function (
     if (isValidPassword) {
       return user;
     }
-    throw Error("Invalid password");
+    return { message: "Invalid password" };
   }
-  throw new Error("Incorrect email");
+  return { message: "Incorrect email" };
 };
 
+userSchema.methods.toJSON = function () {
+  const user = this.toObject();
+  delete user.password;
+
+  return user;
+};
 export default model<UserProps, userModal>("user", userSchema);

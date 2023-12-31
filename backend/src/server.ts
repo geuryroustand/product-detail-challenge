@@ -10,7 +10,7 @@ import listEndpoints from "express-list-endpoints";
 
 import productRouter from "./routers/productRoutes";
 import addToCartRouter from "./routers/addToCartRoutes";
-import authRoutes from "./routers/authRoutes";
+import userRoutes from "./routers/userRoutes";
 
 const server = express();
 
@@ -28,9 +28,9 @@ server.use(bodyParser.json());
 
 //************************ROUTERS**************************
 
-server.use("/product", productRouter);
-server.use("/cart", addToCartRouter);
-server.use("/", authRoutes);
+server.use("/api/product", productRouter);
+server.use("/api/cart", addToCartRouter);
+server.use("/", userRoutes);
 
 http.createServer(server);
 

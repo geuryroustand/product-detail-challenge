@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
+import { RootState } from "../../store/store";
 import styles from "./Cart.module.scss";
-import consolidateCartItems from "../helper/consolidateCartItems";
+import consolidateCartItems from "../../helper/consolidateCartItems";
 
 const Cart = () => {
   const { cartItems, loading, error } = useSelector(

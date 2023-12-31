@@ -2,21 +2,36 @@ import { ReactNode } from "react";
 import styles from "./Button.module.scss";
 
 type ButtonProps = {
-  children: ReactNode;
+  children?: ReactNode;
   variant: "primary" | "secondary";
   size: "small" | "full";
   className?: string;
-  onClick: () => void;
+  onClick?: () => void;
+  onSubmit?: () => void;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 };
 
-const Button = ({ onClick, variant, children, size }: ButtonProps) => {
+const Button = ({
+  onClick,
+  variant,
+  children,
+  size,
+  type = "button",
+  onSubmit,
+  className,
+  disabled,
+}: ButtonProps) => {
   const getButtonVariant = styles[variant];
   const getButtonSize = styles[size];
 
   return (
     <button
+      disabled={disabled}
+      type={type}
       onClick={onClick}
-      className={`${styles.btn} ${getButtonVariant} ${getButtonSize}`}
+      onSubmit={onSubmit}
+      className={`${styles.btn} ${getButtonVariant} ${getButtonSize} ${className}`}
     >
       {children}
     </button>

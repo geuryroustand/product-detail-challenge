@@ -5,6 +5,9 @@ import App from "../App";
 
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 
+import Login from "../Pages/Login/Login";
+import SignUp from "../Pages/Signup/SignUp";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -19,6 +22,14 @@ export const router = createBrowserRouter([
       {
         path: "product-detail/:productId",
         element: <ProductDetail />,
+      },
+      {
+        path: "signup",
+        element: <SignUp />,
+      },
+      {
+        path: "login",
+        element: <Login />,
       },
     ],
   },

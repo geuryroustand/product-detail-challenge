@@ -7,8 +7,12 @@
   margin-bottom: 4rem;
   background-color: $primary-color;
   display: flex;
-  justify-content: right;
+  justify-content: space-evenly;
   align-items: center;
+
+  &-link {
+    color: $white-color;
+  }
 
   &-nav {
     padding: 0px 2rem;
@@ -30,7 +34,9 @@
     }
 
     &--wrapper {
-      position: relative; /* Add relative positioning to the wrapper */
+      display: flex;
+      align-items: center;
+      gap: 0.1rem;
     }
   }
 }
