@@ -5,7 +5,7 @@ import FormField from "../../components/FormField/FormField";
 import Button from "../../components/Button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
-import { userLogin } from "../../store/userSlice";
+import { clearStore, userLogin } from "../../store/userSlice";
 
 type loginProp = {
   email: string;
@@ -62,6 +62,10 @@ const Login: React.FC = () => {
       ...errors,
       [name]: false,
     });
+
+    if (errorLog.email || errorLog.password) {
+      dispatch(clearStore());
+    }
   };
 
   const btnText = loading ? "Loading..." : "Log In";

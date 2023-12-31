@@ -5,7 +5,7 @@ import styles from "./SignUpForm.module.scss";
 import Button from "../../components/Button/Button";
 
 import { useDispatch, useSelector } from "react-redux";
-import { UserProps, clearStore, userSignup } from "../../store/userSlice";
+import { clearStore, userSignup } from "../../store/userSlice";
 import { AppDispatch, RootState } from "../../store/store";
 import Form from "../../components/Form/Form";
 
@@ -19,9 +19,7 @@ const SignUp: React.FC = () => {
     errors: apiErrors,
   } = useSelector((state: RootState) => state.user);
 
-  console.log("loading", loading);
   console.log("user", user);
-  console.log("apiError", apiError);
 
   const [errors, setErrors] = useState({
     username: false,
@@ -103,7 +101,6 @@ const SignUp: React.FC = () => {
     apiErrors?.email?.length! > 0,
     apiError,
   ]);
-  console.log("aqui", apiError);
 
   return (
     <Form onSubmit={signUpForm}>
