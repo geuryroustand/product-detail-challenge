@@ -63,6 +63,6 @@ The production version can be viewed at [http://localhost:4173/](http://localhos
 
 These instructions will help you run both the backend and frontend parts of the application smoothly.
 
-**Live** production URL deploy in AWS Amplify:  [[http://localhost:4173](https://main.d3oznmtu36ej2z.amplifyapp.com/)https://main.d3oznmtu36ej2z.amplifyapp.com/]([http://localhost:4173/](https://main.d3oznmtu36ej2z.amplifyapp.com/)https://main.d3oznmtu36ej2z.amplifyapp.com/)
+**Live** production URL deploy in AWS Amplify:  [https://main.d3oznmtu36ej2z.amplifyapp.com/](https://main.d3oznmtu36ej2z.amplifyapp.com/)
 
 
