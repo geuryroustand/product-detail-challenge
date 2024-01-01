@@ -8,7 +8,13 @@ const Cart = () => {
     (state: RootState) => state.cart
   );
 
-  const { consolidatedItems, totalPrice } = consolidateCartItems(cartItems);
+  const { user } = useSelector((state: RootState) => state.user);
+
+  const { storageCart } = useSelector((state: RootState) => state.storageCart);
+
+  const { consolidatedItems, totalPrice } = user
+    ? consolidateCartItems(user?.cartItems)
+    : consolidateCartItems(storageCart);
 
   const errorMsg = error;
 
@@ -20,7 +26,10 @@ const Cart = () => {
     <div className={styles.cart}>
       <h3 className={styles["cart-heading"]}>Shopping Cart</h3>
       {consolidatedItems.map((item) => (
-        <div className={styles["cart-details"]} key={item._id}>
+        <div
+          className={styles["cart-details"]}
+          key={item._id || item.productId}
+        >
           <h4 className={styles["cart-productName"]}>{item.productName}</h4>
           <p>Color: {item.size}</p>
           <p>Size: {item.color}</p>

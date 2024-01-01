@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchUrl } from "../helper/environmentVariable";
-import { User } from "../components/Types/Types";
+import { GetUserByID, User } from "../components/Types/Types";
 
 export interface UserProps {
   username?: string;
   email?: string;
   password?: string;
+  _id?: string;
 }
 
 export interface ErrorProps {
@@ -22,7 +23,7 @@ interface loginError {
 }
 
 interface UserState {
-  user: UserProps | null;
+  user: GetUserByID | null;
   loading: boolean;
   error: string | null;
   errors: UserProps | null;
@@ -47,7 +48,7 @@ export const userSignup = createAsyncThunk(
   "user/signup",
   async (userData: UserProps, thunkAPI) => {
     try {
-      const response = await fetch(`${fetchUrl}/signup`, {
+      const response = await fetch(`${fetchUrl}/user/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +72,7 @@ export const userLogin = createAsyncThunk(
   "user/login",
   async (userData: { email: string; password: string }, thunkAPI) => {
     try {
-      const response = await fetch(`${fetchUrl}/login`, {
+      const response = await fetch(`${fetchUrl}/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,15 +92,28 @@ export const userLogin = createAsyncThunk(
   }
 );
 
+export const getUserById = createAsyncThunk(
+  "user/getUserById",
+  async (userId: string, thunkAPI) => {
+    try {
+      const response = await fetch(`${fetchUrl}/user/${userId}`);
+
+      if (!response.ok) {
+        const errorData: loginError = await response.json();
+        throw errorData;
+      }
+
+      return await response.json();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    // logoutUser: (state) => {
-    //   state.user = null;
-    //   state.loading = false;
-    //   state.error = null;
-    // },
     clearStore: (state) => {
       state.user = null;
       state.loading = false;
@@ -114,7 +128,9 @@ const userSlice = createSlice({
       })
       .addCase(userSignup.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+
+        const userData = action.payload as User;
+        state.user = userData.user;
         state.error = null;
         state.errors = null;
       })
@@ -129,12 +145,31 @@ const userSlice = createSlice({
       })
       .addCase(userLogin.fulfilled, (state, action) => {
         state.loading = false;
+        console.log("action.payload ", action.payload);
         const userData = action.payload as User;
-
         state.user = userData.user;
         state.error = null;
       })
       .addCase(userLogin.rejected, (state, action) => {
+        state.loading = false;
+        const payload = action.payload as
+          | { password?: string; email?: string }
+          | undefined;
+
+        state.errorLog.password = payload?.password || null;
+        state.errorLog.email = payload?.email || null;
+      })
+
+      .addCase(getUserById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getUserById.fulfilled, (state, action) => {
+        state.loading = false;
+        const userData = action.payload as GetUserByID;
+        state.user = userData;
+        state.error = null;
+      })
+      .addCase(getUserById.rejected, (state, action) => {
         state.loading = false;
         const payload = action.payload as
           | { password?: string; email?: string }

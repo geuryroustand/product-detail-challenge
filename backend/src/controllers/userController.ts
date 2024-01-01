@@ -54,4 +54,28 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { signupUser, loginUser };
+const getUserById = async (req: Request, res: Response) => {
+  const productId: string = req.params.id;
+
+  try {
+    const user: UserProps = await userSchema
+      .findById(productId)
+      .populate("cartItems");
+
+    if (!user) {
+      return res.status(404).send({ error: "User not found." });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    if (error.name === "ValidationError" && error.errors) {
+      return validationError(error, res);
+    }
+
+    res
+      .status(500)
+      .json({ message: "Failed to fetch product.", error: error.message });
+  }
+};
+
+export { signupUser, loginUser, getUserById };

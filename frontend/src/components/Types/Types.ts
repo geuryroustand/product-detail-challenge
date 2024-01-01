@@ -1,12 +1,3 @@
-interface CartItemProps {
-  productId: string;
-  quantity: number;
-  productName: string;
-  price: number;
-  color: string;
-  size: string;
-}
-
 interface ProductProps {
   _id: string;
   productName: string;
@@ -22,6 +13,13 @@ interface User {
   message: string;
   user: UserClass;
 }
+export interface GetUserByID {
+  _id: string;
+  username: string;
+  email: string;
+  cartItems: CartItem[];
+  __v: number;
+}
 
 interface UserClass {
   _id: string;
@@ -31,14 +29,15 @@ interface UserClass {
   __v: number;
 }
 interface CartItem {
-  _id: string;
+  _id?: string;
   productId: string;
+  userId?: string;
   quantity: number;
   productName: string;
   price: number;
   color: string;
   size: string;
-  __v: number;
+  __v?: number;
 }
 
-export type { CartItemProps, ProductProps, User, CartItem, UserClass };
+export type { ProductProps, User, CartItem, UserClass };

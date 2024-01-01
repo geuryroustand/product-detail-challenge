@@ -7,7 +7,6 @@ import {
 } from "../../store/productDetailsSlice";
 import { AppDispatch, RootState } from "../../store/store";
 
-import { fetchCartItems } from "../../store/cartItemsSlice";
 import Card from "../../components/Card/Card";
 
 import styles from "./HomePage.module.scss";
@@ -23,7 +22,6 @@ const HomePage = () => {
     };
 
     dispatch(fetchProductDetails(config));
-    dispatch(fetchCartItems());
   }, []);
 
   const { loading, data, error } = useSelector(

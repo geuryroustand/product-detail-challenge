@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CartItemProps } from "../components/Types/Types";
+import { CartItem } from "../components/Types/Types";
 import { fetchUrl } from "../helper/environmentVariable";
 
 interface CartFetchConfig {
@@ -10,7 +10,7 @@ interface CartFetchConfig {
 
 export const fetchUpdateCart = createAsyncThunk(
   "cart/updateCart",
-  async (cartItem: CartItemProps, thunkAPI) => {
+  async (cartItem: CartItem, thunkAPI) => {
     const config: CartFetchConfig = {
       url: `${fetchUrl}/cart`,
       method: "POST",
@@ -42,7 +42,7 @@ export const fetchUpdateCart = createAsyncThunk(
 );
 
 interface CartState {
-  cartItems: CartItemProps[];
+  cartItems: CartItem[];
   loading: boolean;
   error: string | null;
 }

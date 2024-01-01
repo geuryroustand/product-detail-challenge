@@ -3,12 +3,14 @@ import productDetailsSlice from "./productDetailsSlice";
 import cartSlice from "./updateCart";
 import cartItemsSlice from "./cartItemsSlice";
 import userSlice from "./userSlice";
+import storageCartSlice from "./updateStorageCart";
 
 const reducers = combineReducers({
   fetch: productDetailsSlice,
   productDetails: cartSlice,
   cart: cartItemsSlice,
   user: userSlice,
+  storageCart: storageCartSlice,
 });
 
 const store = configureStore({

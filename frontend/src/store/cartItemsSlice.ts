@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CartItemProps } from "../components/Types/Types";
+
 import { fetchUrl } from "../helper/environmentVariable";
+import { CartItem } from "../components/Types/Types";
 
 interface CartFetchConfig {
   url: string;
@@ -39,7 +40,7 @@ export const fetchCartItems = createAsyncThunk(
 );
 
 interface CartItemsState {
-  cartItems: CartItemProps[];
+  cartItems: CartItem[];
   loading: boolean;
   error: string | null;
 }

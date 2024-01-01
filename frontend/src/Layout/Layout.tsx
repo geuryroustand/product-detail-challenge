@@ -1,23 +1,48 @@
 import { Outlet } from "react-router-dom";
 import styles from "./Layout.module.scss";
 import { FiShoppingCart } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cart from "../components/Cart/Cart";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
 import { Link } from "react-router-dom";
+import { getUserById } from "../store/userSlice";
+
+import { updatedWithLocalStorage } from "../store/updateStorageCart";
 
 const Layout = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const [showCart, setShowCart] = useState(false);
 
-  const { cartItems } = useSelector((state: RootState) => state.cart);
   const { user } = useSelector((state: RootState) => state.user);
+  const { storageCart } = useSelector((state: RootState) => state.storageCart);
+
+  const totalItemsInCart = user ? user.cartItems.length : storageCart.length;
 
   const onClick = () => {
     setShowCart(!showCart);
   };
 
-  const totalItemInCart = cartItems.length;
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("userId", user?._id || "");
+    }
+
+    const userId = localStorage.getItem("userId");
+    if (userId && !user) {
+      dispatch(getUserById(userId));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) {
+      const getUpdatedItemsFromStorage = localStorage.getItem("cart");
+
+      if (getUpdatedItemsFromStorage) {
+        dispatch(updatedWithLocalStorage(getUpdatedItemsFromStorage));
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -41,7 +66,7 @@ const Layout = () => {
         <nav className={styles["header-nav"]}>
           <div className={styles["header-nav--wrapper"]} onClick={onClick}>
             <span className={styles["header-nav--counter"]}>
-              {totalItemInCart}
+              {totalItemsInCart}
             </span>
             <FiShoppingCart className={styles["header-nav--icon"]} />
           </div>

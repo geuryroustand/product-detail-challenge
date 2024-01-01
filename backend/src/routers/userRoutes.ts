@@ -1,9 +1,14 @@
-import { loginUser, signupUser } from "../controllers/authController";
+import {
+  getUserById,
+  loginUser,
+  signupUser,
+} from "../controllers/userController";
 import { Router } from "express";
 
-const authRoutes = Router();
+const userRoutes = Router();
 
-authRoutes.post("/api/signup", signupUser);
-authRoutes.post("/api/login", loginUser);
+userRoutes.post("/signup", signupUser);
+userRoutes.post("/login", loginUser);
+userRoutes.get("/:id", getUserById);
 
-export default authRoutes;
+export default userRoutes;

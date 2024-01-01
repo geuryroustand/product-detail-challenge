@@ -30,7 +30,7 @@ server.use(bodyParser.json());
 
 server.use("/api/product", productRouter);
 server.use("/api/cart", addToCartRouter);
-server.use("/", userRoutes);
+server.use("/api/user", userRoutes);
 
 http.createServer(server);
 

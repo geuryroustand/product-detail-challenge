@@ -14,18 +14,23 @@ import {
 import { AppDispatch, RootState } from "../../store/store";
 import { useParams } from "react-router-dom";
 import { fetchUpdateCart } from "../../store/updateCart";
-import { fetchCartItems } from "../../store/cartItemsSlice";
+
 import Image from "../../components/Image/Image";
-import { CartItemProps } from "../../components/Types/Types";
+import { CartItem } from "../../components/Types/Types";
+import { updatedWithLocalStorage } from "../../store/updateStorageCart";
+import { getUserById } from "../../store/userSlice";
 
 const ProductDetail = () => {
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
 
   const { productId } = useParams();
+
   const { loading, data, error } = useSelector(
     (state: RootState) => state.fetch
   );
+
+  const { user } = useSelector((state: RootState) => state.user);
 
   const errorMsg = error;
   const imageUrl = data?.image || "";
@@ -44,11 +49,11 @@ const ProductDetail = () => {
     };
 
     dispatch(fetchProductDetails(config));
-    dispatch(fetchCartItems());
   }, []);
 
-  const selectedProduct: CartItemProps = {
+  const selectedProduct: CartItem = {
     productId: data?._id || "",
+    userId: user?._id,
     productName: data?.productName || "",
     price: data?.price || 0,
     quantity: data?.quantity || 0,
@@ -59,8 +64,27 @@ const ProductDetail = () => {
   const manageAddToCart = async () => {
     if (selectedColor !== undefined && selectedSize !== undefined) {
       try {
-        await dispatch(fetchUpdateCart(selectedProduct));
-        await dispatch(fetchCartItems());
+        if (user) {
+          await dispatch(fetchUpdateCart(selectedProduct));
+          await dispatch(getUserById(user._id));
+        } else {
+          const getItemFromLocalStorage = localStorage.getItem("cart");
+
+          let items: CartItem[] = [];
+
+          if (getItemFromLocalStorage) {
+            items = JSON.parse(getItemFromLocalStorage) as CartItem[];
+          }
+          const updatedItems = [...items, selectedProduct];
+
+          localStorage.setItem("cart", JSON.stringify(updatedItems));
+
+          const getUpdatedItemsFromStorage = localStorage.getItem("cart");
+
+          if (getUpdatedItemsFromStorage) {
+            dispatch(updatedWithLocalStorage(getUpdatedItemsFromStorage));
+          }
+        }
       } catch (error) {
         console.log(error);
       }
