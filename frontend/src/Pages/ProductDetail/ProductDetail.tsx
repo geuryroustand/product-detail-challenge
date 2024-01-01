@@ -19,6 +19,7 @@ import Image from "../../components/Image/Image";
 import { CartItem } from "../../components/Types/Types";
 import { updatedWithLocalStorage } from "../../store/updateStorageCart";
 import { getUserById } from "../../store/userSlice";
+import { fetchUrl } from "../../helper/environmentVariable";
 
 const ProductDetail = () => {
   const [selectedColor, setSelectedColor] = useState<string>("");
@@ -44,7 +45,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     const config: FetchConfig = {
-      url: `${import.meta.env.VITE_API_DEV_URL}/product/${productId}`,
+      url: `${fetchUrl}/product/${productId}`,
       method: "GET",
     };
 

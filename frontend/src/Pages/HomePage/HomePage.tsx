@@ -11,13 +11,14 @@ import Card from "../../components/Card/Card";
 
 import styles from "./HomePage.module.scss";
 import { ProductProps } from "../../components/Types/Types";
+import { fetchUrl } from "../../helper/environmentVariable";
 
 const HomePage = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const config: FetchConfig = {
-      url: `${import.meta.env.VITE_API_DEV_URL}/product`,
+      url: `${fetchUrl}/product`,
       method: "GET",
     };
 
