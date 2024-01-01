@@ -145,7 +145,6 @@ const userSlice = createSlice({
       })
       .addCase(userLogin.fulfilled, (state, action) => {
         state.loading = false;
-        console.log("action.payload ", action.payload);
         const userData = action.payload as User;
         state.user = userData.user;
         state.error = null;
