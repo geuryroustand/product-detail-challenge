@@ -1,4 +1,7 @@
 
+## Notes
+
+When clicking the button "Add to Cart" without a user account will store the product information in the local storage once signup and login will store the product in the database.
 
 
 ## Backend
