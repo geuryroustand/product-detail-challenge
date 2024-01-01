@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchUrl } from "../helper/environmentVariable";
+import { User } from "../components/Types/Types";
 
 export interface UserProps {
   username?: string;
@@ -128,7 +129,9 @@ const userSlice = createSlice({
       })
       .addCase(userLogin.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        const userData = action.payload as User;
+
+        state.user = userData.user;
         state.error = null;
       })
       .addCase(userLogin.rejected, (state, action) => {

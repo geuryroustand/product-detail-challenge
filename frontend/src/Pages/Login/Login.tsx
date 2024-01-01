@@ -6,6 +6,7 @@ import Button from "../../components/Button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
 import { clearStore, userLogin } from "../../store/userSlice";
+import { useNavigate } from "react-router-dom";
 
 type loginProp = {
   email: string;
@@ -14,24 +15,21 @@ type loginProp = {
 
 const Login: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
-  const { loading, user, error, errorLog } = useSelector(
-    (state: RootState) => state.user
-  );
+  const { loading, errorLog } = useSelector((state: RootState) => state.user);
 
   const [errors, setErrors] = useState({
     email: false,
     password: false,
   });
-  console.log("error", error);
-  console.log("errorLog", errorLog);
 
   const [formData, setFormData] = useState<loginProp>({
     email: "",
     password: "",
   });
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
@@ -48,7 +46,11 @@ const Login: React.FC = () => {
       return;
     }
 
-    dispatch(userLogin(formData));
+    dispatch(userLogin(formData)).then((resultAction) => {
+      if (userLogin.fulfilled.match(resultAction)) {
+        navigate("/");
+      }
+    });
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +80,6 @@ const Login: React.FC = () => {
     loading;
 
   useEffect(() => {
-    console.log("errorLog?.email?.length! > 0", errorLog?.email?.length! > 0);
     if (errorLog.password?.length! > 0 || errorLog.email?.length! > 0) {
       setErrors({
         email: errorLog?.email?.length! > 0,

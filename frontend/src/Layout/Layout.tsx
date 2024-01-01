@@ -11,6 +11,7 @@ const Layout = () => {
   const [showCart, setShowCart] = useState(false);
 
   const { cartItems } = useSelector((state: RootState) => state.cart);
+  const { user } = useSelector((state: RootState) => state.user);
 
   const onClick = () => {
     setShowCart(!showCart);
@@ -24,12 +25,19 @@ const Layout = () => {
         <Link className={styles["header-link"]} to="/">
           Home
         </Link>
-        <Link className={styles["header-link"]} to="/login">
-          Log in
-        </Link>
-        <Link className={styles["header-link"]} to="/signup">
-          Sign up
-        </Link>
+        {!user && (
+          <>
+            <Link className={styles["header-link"]} to="/login">
+              Log in
+            </Link>
+            <Link className={styles["header-link"]} to="/signup">
+              Sign up
+            </Link>
+          </>
+        )}
+
+        {user && <p className={styles["header-username"]}>{user?.username}</p>}
+
         <nav className={styles["header-nav"]}>
           <div className={styles["header-nav--wrapper"]} onClick={onClick}>
             <span className={styles["header-nav--counter"]}>

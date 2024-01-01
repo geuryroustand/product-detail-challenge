@@ -8,18 +8,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearStore, userSignup } from "../../store/userSlice";
 import { AppDispatch, RootState } from "../../store/store";
 import Form from "../../components/Form/Form";
+import { useNavigate } from "react-router-dom";
 
 const SignUp: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const {
     loading,
-    user,
+
     error: apiError,
     errors: apiErrors,
   } = useSelector((state: RootState) => state.user);
-
-  console.log("user", user);
 
   const [errors, setErrors] = useState({
     username: false,
@@ -52,7 +52,11 @@ const SignUp: React.FC = () => {
       return;
     }
 
-    dispatch(userSignup(formData));
+    dispatch(userSignup(formData)).then((resultAction) => {
+      if (userSignup.fulfilled.match(resultAction)) {
+        navigate("/");
+      }
+    });
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
